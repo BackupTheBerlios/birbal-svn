@@ -20,7 +20,7 @@ closed and marked no further action
 
 6. when the report is complete, verification is done. A negative
 verification will also NFA the file - verification remark is added and file
-closed.
+closed. Part of verification is a check for duplicate.
 
 7. The complete and verified report is then scrutinised and approved
 
@@ -49,8 +49,22 @@ approve)
 4. deathplacetypes - same thing
 5. reportypes - form, letter, phone, oral, web etc
 
+Reportsregister:
+
+id
+date opened
+reportytpe - fk to reportypes
+filenumber
+physical location of report
+location of digital copy of report
+accepted/rejected
+dateclosed
+
+
+
 birthregister:
 
+id
 name
 fathers name
 mothers name
@@ -65,6 +79,7 @@ birthplace - foreignkey to birthplaces
 
 deathregister:
 
+id
 firstname
 lastname
 fathers/husbands/mothers name
@@ -73,3 +88,6 @@ deathplace - foreign key to deathplaces
 cause of death
 addresss
 date registered
+report - foreign key to reports table
+
+Transactions:
