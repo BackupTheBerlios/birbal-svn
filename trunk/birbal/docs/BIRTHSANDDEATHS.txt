@@ -38,3 +38,38 @@ if the party is entitled to it, the certificate is issued on payment of the
 fee. Else it is refused and the application filed along with the remark
 
 12. Birth and death statistics can be generated.
+
+Database schema:
+
+master tables:
+1. areas - could be wards in a municipality or villages in rural areas
+2. officials - name, designation, authority (scrutinise, verify, add,
+approve)
+3. birthplacetypes - home, hospital, nursinghome etc
+4. deathplacetypes - same thing
+5. reportypes - form, letter, phone, oral, web etc
+
+birthregister:
+
+name
+fathers name
+mothers name
+address
+area
+report - foreignkey to reports table
+date of birth
+date registered
+sex
+identity code number
+birthplace - foreignkey to birthplaces
+
+deathregister:
+
+firstname
+lastname
+fathers/husbands/mothers name
+date of death
+deathplace - foreign key to deathplaces
+cause of death
+addresss
+date registered
