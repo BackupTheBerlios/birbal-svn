@@ -26,6 +26,9 @@ closed.
 
 8. On approval the details of the report are entered into the register
 
+8(a). for births a provision is there to add the name of the child when the
+child is named - this also follows application-verification-approval route
+
 9. An application may be made to change or remove an entry in the register
 
 10. this application also goes through scrutiny, verification and approval
