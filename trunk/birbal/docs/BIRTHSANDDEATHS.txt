@@ -94,12 +94,20 @@ addresss
 date registered
 report - foreign key to reports table
 
-Transactions: should it be two tables - one for processing reports and the
-other for processing registers?
+Transactions: 
+
+reporthandling
 
 report - fk to reports table
+transactiontype - fk to transactiontypes
+date
+official - fk to officials
+note - text
+
+registerhandling
+
 register - fk to register
 transactiontype - fk to transactiontypes
 date
 official - fk to officials
-note - text file
+note - text
