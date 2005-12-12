@@ -87,12 +87,15 @@ lastname
 fathers/husbands/mothers name
 date of death
 deathplace - foreign key to deathplaces
+place of death
 cause of death
+area - fk to areas
 addresss
 date registered
 report - foreign key to reports table
 
-Transactions:
+Transactions: should it be two tables - one for processing reports and the
+other for processing registers?
 
 report - fk to reports table
 register - fk to register
