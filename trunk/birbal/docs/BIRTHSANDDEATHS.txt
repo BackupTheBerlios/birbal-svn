@@ -119,3 +119,5 @@ date
 approved/rejected
 note
 do we need to store to whom issued?
+Since people will pay for the certificates, I guess we should store the
+name of the person to whom it was issued, money taken, date, etc. too.
