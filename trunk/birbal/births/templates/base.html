@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"DTD/xhtml1-transitional.dtd">
+<html><head>
+<LINK REL="stylesheet" type='text/css' href='/sitemedia/css/layout.css' title='default'>
+<title>{% trans "Birbal eGovernance Project" %}</title>
+
+
+</head>
+<body>
+
+<div id="centertop">
+	<br/>
+	<img src="/sitemedia/pics/masthead.jpg" width="800"/>
+	<br/>
+	<h1><span>{% trans "Open Source eGovernance" %}</span></h1>
+	</div>
+
+<div id="navsite">
+  
+  <h5>Site Navigation</h5>
+    <ul>
+     {% block navsite %}
+     {% for p in mn %}
+	<li >
+	<a href = "/bambanks/{{ p.url }}" {{ p.id }}> {{ p.name }}
+	</a>
+	</li>
+	{% endfor %}
+
+     {% endblock %}
+    </ul>
+    
+</div>
+<div id="navsite2">
+  
+  <h5>Site Navigation</h5>
+    <ul>
+     {% block navsite2 %}
+     {% for p in mn2 %}
+	<li >
+	<a href = "/bambanks/{{ p.url }}" {{ p.id }}> {{ p.name }}
+	</a>
+	</li>
+	{% endfor %}
+
+     {% endblock %}
+    </ul>
+    
+</div>
+
+<div id="leftcontent">
+<img src="/sitemedia/pics/bamboogreen.jpg" width="140" />
+</div>
+
+<div id="centercontent">
+{% block centercontent %} {% endblock %}
+</div>
+
+
+<div id="footer">
+<p>Built by <a href="mailto:lawgon@thenilgiris.com">XLQuest</a>, 
+powered by FreeBSD, Apache, Python, Postgresql and Django
+ copyright 2005  
+ <a href="mailto:webmaster@bamboobanks.in">Bamboo Banks</a></p>
+ </div>
+</div>
+</body>
+</html>
