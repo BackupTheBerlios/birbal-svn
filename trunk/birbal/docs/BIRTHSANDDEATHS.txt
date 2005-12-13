@@ -111,3 +111,11 @@ transactiontype - fk to transactiontypes
 date
 official - fk to officials
 note - text
+
+certificatehandling
+
+report - fk to reports table
+date
+approved/rejected
+note
+do we need to store to whom issued?
