@@ -33,7 +33,7 @@ MEDIA_ROOT = '/home/lawgon/media/'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
-MEDIA_URL = 'http://thenilgiris.web/smedia/'
+MEDIA_URL = 'http://birbal.web/smedia/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -64,4 +64,6 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
+    'births.apps.register',
 )
