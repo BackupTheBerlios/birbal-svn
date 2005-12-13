@@ -7,7 +7,7 @@ coded in one place in config itself
 2. Record keeping is essential for transparency. So we cant just have a
 simple form to be added/edited, but have to lay an audit trail
 
-3. Both births and deaths the process starts with a report from and
+3. Both births and deaths the process starts with a report from an
 informant. The report may be in official form or in writing. It could also
 be over the web, telephone or by email or oral.
 
@@ -35,7 +35,8 @@ child is named - this also follows application-verification-approval route
 
 11. Applications may be made for birth/death certificates. On verification,
 if the party is entitled to it, the certificate is issued on payment of the
-fee. Else it is refused and the application filed along with the remark
+fee. Else it is refused and the application filed along with the remark.
+Provision has to be made for paying the fee - either online or offline.
 
 12. Birth and death statistics can be generated.
 
@@ -51,18 +52,29 @@ approve)
 6. transactiontypes - openingfile, scrutiny, returning, verification,
 approval, deletion, modification, certificateissue, certificaterefusal
 
-Reportsregister:
+Reportsregister (births):
 
 id
 date opened
+informant name
 reportytpe - fk to reportypes
 filenumber
 physical location of report
 location of digital copy of report
+name
+fathers name
+mothers name
+address
+area
+date of birth
+date registered
+sex
+birthplace - foreignkey to birthplaces
 accepted/rejected
 dateclosed
 
-
+(some information is duplicated in both tables, but this is necessary for
+audit trail)
 
 birthregister:
 
@@ -78,6 +90,27 @@ date registered
 sex
 identity code number
 birthplace - foreignkey to birthplaces
+
+Reportsregister (deaths):
+
+id
+informant name
+date opened
+reportytpe - fk to reportypes
+filenumber
+physical location of report
+location of digital copy of report
+fname
+lname
+fathers name
+address
+area
+date of death
+sex
+deathplace - foreignkey to deathplaces
+cause of death
+accepted/rejected
+dateclosed
 
 deathregister:
 
