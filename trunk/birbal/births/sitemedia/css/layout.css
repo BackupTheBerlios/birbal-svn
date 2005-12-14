@@ -197,10 +197,10 @@ dd.link a {
 
 	#centercontent {
 		float:left;
-		width:68%;
+		width:66%;
 		margin-top: 10px;
-		margin-left:2px;
-		margin-right:2px;
+		margin-left:1%;
+		margin-right:1%;
 		background:#fff;
 		voice-family: "\"}\"";
 		voice-family: inherit;
@@ -213,18 +213,18 @@ dd.link a {
 
 	#leftcontent {
 		float:left;
-		overflow:hidden;
+/*		overflow:scroll; */
 		margin-top: 10px;
 		margin-left: 1%;
-		width:10%;
+		width:12%;
 		margin-bottom:10px;
 		}
 		
 	#rightcontent {
 		float:left;
-		overflow:hidden;
+/*		overflow:scroll; */
 		margin-top: 10px;
-		width:18%;
+		width:16%;
 		margin-bottom:10px;
 		}
 		
@@ -238,9 +238,9 @@ dd.link a {
 		}
 		
 	#button {
-		width: 100px;
+		width:80%;
 		border-right: 1px solid #000;
-		padding: 0 0 1em 0;
+/*		padding: 0 0 1em 0; */
 		margin-bottom: 1em;
 		font-family: 'Trebuchet MS', 'Lucida Grande',
 		Verdana, Lucida, Geneva, Helvetica, 
