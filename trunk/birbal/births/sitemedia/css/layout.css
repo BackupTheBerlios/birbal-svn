@@ -226,6 +226,7 @@ dd.link a {
 		margin-top: 10px;
 		width:16%;
 		margin-bottom:10px;
+		background:#2586d7;
 		}
 		
 	
@@ -247,6 +248,7 @@ dd.link a {
 		Arial, sans-serif;
 		background-color: #90bade;
 		color: #333;
+		font-size: 80%;
 		}
 		
 	#button ul {

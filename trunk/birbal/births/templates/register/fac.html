@@ -1,0 +1,79 @@
+{% extends "base" %}
+{% block centercontent %}
+{% if list %}
+    {% for p in list %}
+    	<h2>{{ p.title }}</h2>
+	<br/>
+	{% ifequal p.layout "TB" %}
+		{% if p.photo %}
+		<div id="newsimage">
+		<img src="{{ p.get_photo_url }}" width="75%">
+		</div>
+		{% endif %}
+		{% if p.blurb %}
+		<div id="blurb">
+		{{ p.blurb }}
+		</div>
+		<br/>
+		<br/>
+		{% endif %}
+		{{ p.matter }}
+	{% endifequal %}
+	
+	{% ifequal p.layout "LR" %}
+		<table>
+		<tr>
+		<TD width="65%">
+			{% if p.photo %}
+			<img src="{{ p.get_photo_url }}" width="450"/>
+			{% endif %}
+		</TD>
+		<TD rowspan="2">
+			{{ p.matter }}
+		</TD>
+		</tr>
+		<tr><TD>
+			{% if p.blurb %}
+			<div id="blurb">
+			{{ p.blurb }}
+			</div>
+			{% endif %}
+		</TD>
+		
+		</tr>
+		</table>	
+	{% endifequal %}
+	
+	{% ifequal p.layout "RL" %}
+		<table>
+		<tr>
+		<TD rowspan="2">
+			{{ p.matter }}
+		</TD>
+		<TD width="65%">
+			{% if p.photo %}
+			<img src="{{ p.get_photo_url }}" width="450"/>
+			{% endif %}
+		</TD>
+		
+		</tr>
+		<tr>
+		
+		<TD>
+			{% if p.blurb %}
+			<div id="blurb">
+			{{ p.blurb }}
+			</div>
+			{% endif %}
+		</TD>
+		
+		</tr>
+		</table>	
+	{% endifequal %}
+	
+
+    {% endfor %}
+{% else %}
+    <h2>Still Under Construction</h2>
+{% endif %}
+{% endblock %}
