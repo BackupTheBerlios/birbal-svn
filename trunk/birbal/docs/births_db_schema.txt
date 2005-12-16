@@ -2,8 +2,9 @@ Database schema:
 
 master tables:
 1. areas - could be wards in a municipality or villages in rural areas
-2. officials - name, designation, authority (scrutinise, verify, add,
+2. authority (scrutinise, verify, add,
 approve)
+2. officials - name, designation, status
 3. birthplacetypes - home, hospital, nursinghome etc
 4. deathplacetypes - same thing
 5. reportypes - form, letter, phone, oral, web etc
