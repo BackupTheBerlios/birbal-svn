@@ -110,6 +110,14 @@ class Reporttype(meta.Model):
 
 # detail tables for actual data
 
+#birth reports, death reports, birth register death register
+
+##############################################end of actual data details
+
+# transaction tables
+
+# report, register and certificate handling - basically file noting
+
 ##############################################end of actual data details
 
 
