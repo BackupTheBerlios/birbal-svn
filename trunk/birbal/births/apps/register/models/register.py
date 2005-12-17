@@ -16,7 +16,7 @@ class Power(meta.Model):
         list_display = ('name',),
             search_fields = ['name'],)
     def __repr__(self):
-            return "%s" %(_(self.name))
+            return "%s" %(self.name)
 
 class Status(meta.Model):
     name = meta.CharField(_("Status"),maxlength=50,unique=True)
@@ -26,7 +26,7 @@ class Status(meta.Model):
         list_display = ('name',),
             search_fields = ['name'],)
     def __repr__(self):
-            return "%s" %(_(self.name))
+            return "%s" %(self.name)
 
 class Official(meta.Model):
     rank = meta.CharField(_("Rank"),maxlength=50,unique=True)
@@ -52,6 +52,58 @@ class Person(meta.Model):
 #############################################end of persons
 
 # master tables for actual data
+
+class Area(meta.Model):
+    name = meta.CharField(_("Area"),maxlength=50,unique=True)
+
+    class META:
+        admin = meta.Admin(
+        list_display = ('name',),
+            search_fields = ['name'],)
+    def __repr__(self):
+            return "%s" %(self.name)
+
+        
+
+class Street(meta.Model):
+    name = meta.CharField(_("Street"),maxlength=50,unique=True)
+    area = meta.ForeignKey(Area)
+    class META:
+        admin = meta.Admin(
+        list_display = ('name','area',),
+            search_fields = ['name'],)
+    def __repr__(self):
+            return _("Street: %s Area %s") %(self.name,self.get_area)
+
+class Deathplace(meta.Model):
+    name = meta.CharField(_("Area"),maxlength=50,unique=True)
+
+    class META:
+        admin = meta.Admin(
+        list_display = ('name',),
+            search_fields = ['name'],)
+    def __repr__(self):
+            return "%s" %(self.name)
+
+class Birthplace(meta.Model):
+    name = meta.CharField(_("Area"),maxlength=50,unique=True)
+
+    class META:
+        admin = meta.Admin(
+        list_display = ('name',),
+            search_fields = ['name'],)
+    def __repr__(self):
+            return "%s" %(self.name)
+
+class Reporttype(meta.Model):
+    name = meta.CharField(_("Area"),maxlength=50,unique=True)
+
+    class META:
+        admin = meta.Admin(
+        list_display = ('name',),
+            search_fields = ['name'],)
+    def __repr__(self):
+            return "%s" %(self.name)
 
 ##############################################end of actual data master
 
