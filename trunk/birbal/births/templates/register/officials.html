@@ -1,0 +1,32 @@
+{% extends "base" %}
+{% load i18n %}
+{% block centercontent %}
+<h2>List of Officials in the Office of The Registrar of Births and Deaths</h2>
+<br/>
+{% if list %}
+    <table border="1">
+    <TR>
+    <Th>{% trans "Name" %}</Th>
+    <th>{% trans "Designation" %}</th>
+    <th>{% trans "Powers" %}</th>
+    <th>{% trans "Status" %}</th>
+    </TR>
+    
+    {% for p in list %}
+    <tr>
+    <td>{{ p.name }}</td>
+    <td>{{ p.get_rank }}</td>
+    <td>
+    {% for m in p.get_rank.get_power_list %}
+    {{ m }}
+    {% endfor %}
+    </td>
+    <td>{{ p.get_status }}</td>
+    </tr>		
+
+    {% endfor %}
+    </table>
+{% else %}
+    <h2>List of officials not yet posted</h2>
+{% endif %}
+{% endblock %}

@@ -1,14 +1,15 @@
 from django.core import template_loader
 from django.core.extensions import DjangoContext as Context
 from django.utils.httpwrappers import HttpResponse
-from births.apps.register.models.register import advertisements,facilitys
+from births.apps.register.models.register import *
 import datetime
 from django.core.exceptions import Http404
 
 menu_items = [
-                {'name':'Home','url':'fac/HM/','id':''},
+              {'name':'Home','url':'fac/HM/','id':''},
               {'name':'FAQ','url':'fac/FQ/','id':''},
               {'name':'Documents','url':'fac/DC/','id':''},
+              {'name':'Officials','url':'officials/','id':''},
               ]
 
 fac_types ={
@@ -44,6 +45,17 @@ def fac(request,type):
     t = template_loader.get_template('register/fac')
     c = Context(request,
                 {'list':list,'tp':type,
+                 'ads':extract(),
+                 'mn': menu_items,
+                 })
+    
+    return HttpResponse(t.render(c))
+
+def dutyroster(request):
+    list = persons.get_list()
+    t = template_loader.get_template('register/officials')
+    c = Context(request,
+                {'list':list,
                  'ads':extract(),
                  'mn': menu_items,
                  })

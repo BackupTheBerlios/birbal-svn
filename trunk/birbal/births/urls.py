@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     # Uncomment this for admin:
      (r'^births/admin/', include('django.contrib.admin.urls.admin')),
     (r'^births/$', 'births.apps.register.views.index'),
+    (r'^births/officials/$', 'births.apps.register.views.dutyroster'),
     (r'^births/ads/(?P<id>\d+)/$', 'births.apps.register.views.ads'),
     (r'^births/fac/(?P<type>\w+)/$', 'births.apps.register.views.fac'),
 )
