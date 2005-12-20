@@ -52,7 +52,7 @@ class Person(meta.Model):
         list_display = ('name','rank','status',),
             search_fields = ['name','rank'],)
     def __repr__(self):
-            return "%s %s %s %s"\
+            return "%s %s %s"\
             %(self.name,self.get_rank(),self.get_status())
 
 #############################################end of persons
