@@ -48,6 +48,7 @@ class Person(meta.Model):
     rank = meta.ForeignKey(Official)
     status = meta.ForeignKey(Status)
     class META:
+        ordering = ['rank','name']
         admin = meta.Admin(
         list_display = ('name','rank','status',),
             search_fields = ['name','rank'],)
