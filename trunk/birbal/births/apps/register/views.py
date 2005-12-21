@@ -23,6 +23,9 @@ fac_types ={
         
 
 def extract():
+    """ Gets the advertisements and announcements for the
+        right column
+        """
     list = advertisements.get_values(fields=['title','id'],
                               expires__gt=datetime.datetime.now(),
                            order_by=('-date',),
@@ -31,7 +34,8 @@ def extract():
 
 
 def index(request):
-    
+    """ Not used
+        """
     t = template_loader.get_template('register/index')
     c = Context(request,
                 {'ads':extract(),
@@ -41,6 +45,9 @@ def index(request):
     return HttpResponse(t.render(c))
 
 def fac(request,type):
+    """ View for display of the documentation
+        generates all pages on the fly
+        """
     list = facilitys.get_list(type__exact=type,)
     t = template_loader.get_template('register/fac')
     c = Context(request,
@@ -52,6 +59,8 @@ def fac(request,type):
     return HttpResponse(t.render(c))
 
 def dutyroster(request):
+    """ Shows attendance status for employees
+        """
     list = persons.get_list()
     t = template_loader.get_template('register/officials')
     c = Context(request,

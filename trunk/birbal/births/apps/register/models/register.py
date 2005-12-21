@@ -14,6 +14,10 @@ sexes = (
 # define officials, persons, powers, ranks and statuses
 
 class Power(meta.Model):
+    """ Powers that officials have to take actions
+        will be attached to officials with a check that
+        if there is no power the action will not take place
+        """
     name = meta.CharField(_("Power"),maxlength=50,unique=True)
 
     class META:
@@ -23,17 +27,15 @@ class Power(meta.Model):
     def __repr__(self):
             return "%s" %(self.name)
 
-class Status(meta.Model):
+class Status(Power):
+    """ A field describing what a person is doing - should be
+        set by changes in the movement register
+        """
     name = meta.CharField(_("Status"),maxlength=50,unique=True)
 
-    class META:
-        admin = meta.Admin(
-        list_display = ('name',),
-            search_fields = ['name'],)
-    def __repr__(self):
-            return "%s" %(self.name)
-
 class Official(meta.Model):
+    """ Types of officials with their powers
+        """
     rank = meta.CharField(_("Rank"),maxlength=50,unique=True)
     powers = meta.ManyToManyField(Power)
     class META:
@@ -44,6 +46,9 @@ class Official(meta.Model):
             return "%s" %(self.rank)
 
 class Person(meta.Model):
+    """ Persons working - rank and status. Once movement register is
+        set up we could remove the status field
+        """
     name = meta.CharField(_("Name"),maxlength=50,unique=True)
     rank = meta.ForeignKey(Official)
     status = meta.ForeignKey(Status)
@@ -60,19 +65,17 @@ class Person(meta.Model):
 
 # master tables for actual data
 
-class Area(meta.Model):
+class Area(Power):
+    """ Each jurisdiction is divided into areas. Areas can be wards,
+        mohallas, sectors etc
+        """
     name = meta.CharField(_("Area"),maxlength=50,unique=True)
 
-    class META:
-        admin = meta.Admin(
-        list_display = ('name',),
-            search_fields = ['name'],)
-    def __repr__(self):
-            return "%s" %(self.name)
-
-        
 
 class Street(meta.Model):
+    """ Streets may be streets or colonies or slums or whatever
+        they have to be unique in an area
+        """
     name = meta.CharField(_("Street"),maxlength=50)
     area = meta.ForeignKey(Area)
     class META:
@@ -83,35 +86,25 @@ class Street(meta.Model):
     def __repr__(self):
             return _("Street: %s Area %s") %(self.name,self.get_area)
 
-class Deathplace(meta.Model):
+class Deathplace(Power):
+    """ Type of death place - at home, hospital, on the street ...
+        """
     name = meta.CharField(_("Area"),maxlength=50,unique=True)
 
-    class META:
-        admin = meta.Admin(
-        list_display = ('name',),
-            search_fields = ['name'],)
-    def __repr__(self):
-            return "%s" %(self.name)
 
-class Birthplace(meta.Model):
+class Birthplace(Power):
+    """ Type of death place - at home, hospital, on the street,
+        found abandoned, given up for adoption etc
+        """
     name = meta.CharField(_("Area"),maxlength=50,unique=True)
 
-    class META:
-        admin = meta.Admin(
-        list_display = ('name',),
-            search_fields = ['name'],)
-    def __repr__(self):
-            return "%s" %(self.name)
 
-class Reporttype(meta.Model):
+class Reporttype(Power):
+    """ By email, over the web, phone, in person: how did the
+        report come?
+        """
     name = meta.CharField(_("Area"),maxlength=50,unique=True)
 
-    class META:
-        admin = meta.Admin(
-        list_display = ('name',),
-            search_fields = ['name'],)
-    def __repr__(self):
-            return "%s" %(self.name)
 
 ##############################################end of actual data master
 
@@ -124,6 +117,8 @@ class Reporttype(meta.Model):
 #in the admin. 
 
 class Birthreport(meta.Model):
+    """ Actual report of birth - not to be altered
+        """
     fileno = meta.CharField(_("File Number"),maxlength=50,unique=True)
     dateopened = meta.DateTimeField(
         _("Date Opened"),default=meta.LazyDate(),editable=False)
@@ -215,6 +210,8 @@ class Birthreport(meta.Model):
 
 
 class Birthregister(meta.Model):
+    """ Final entry in the birth register
+        """
     report = meta.ForeignKey(Birthreport,
                              verbose_name=_("Original Report"))
     dateopened = meta.DateTimeField(
@@ -282,6 +279,8 @@ class Birthregister(meta.Model):
 # all repeated for deaths
 
 class Deathreport(meta.Model):
+    """ Actual report of death - not to be altered
+        """
     fileno = meta.CharField(_("File Number"),maxlength=50,unique=True)
     dateopened = meta.DateTimeField(
         _("Date Opened"),default=meta.LazyDate(),editable=False)
@@ -375,6 +374,8 @@ class Deathreport(meta.Model):
 
 
 class Deathregister(meta.Model):
+    """ Final entry in the death register
+        """
     report = meta.ForeignKey(Deathreport,
                              verbose_name=_("Original Report"))
     dateopened = meta.DateTimeField(
@@ -444,6 +445,67 @@ class Deathregister(meta.Model):
 # transaction tables
 
 # report, register and certificate handling - basically file noting
+# one generic noting thingie that does everything - cant have that
+# foreign key problem - so subclass 
+
+class Notingdeathreport(meta.Model):
+    """ Processing the death report
+        """
+    report = meta.ForeignKey(Deathreport,
+                             verbose_name=_("Death Report File"))
+    date = meta.DateTimeField(
+        _("Date Opened"),default=meta.LazyDate(),editable=False)
+    action = meta.ForeignKey(Power,
+                             verbose_name=_("Action Taken"))
+    person = meta.ForeignKey(Person,
+                             verbose_name=_("Person making the note"))
+    note = meta.TextField(_("Note"))
+    addedby = meta.CharField(_("Added By"),maxlength=100,editable=False)
+
+    class META:
+        admin = meta.Admin(
+        list_display = ('report','date'),
+            search_fields = ['report'],
+        fields =
+            (
+                (
+                None,
+                    {
+                    'fields': ('report',
+                               'action',
+                               'person',
+                               'note')
+                    }
+                ),
+                
+                
+                
+            ),
+        )
+    def __repr__(self):
+            return "%s %s" %(self.report,self.date)
+
+class Notingbirthreport(Notingdeathreport):
+    """ Processing the birth report
+        """
+    report = meta.ForeignKey(Birthreport,
+                             verbose_name=_("Birth Report File"))
+
+class Notingdeathregister(Notingdeathreport):
+    """ Processing the death register
+        """
+    report = meta.ForeignKey(Birthregister,
+                             verbose_name=_("Death Register Entry"))
+
+class Notingbirthregister(Notingdeathreport):
+    """ Processing the birth register
+        """
+    report = meta.ForeignKey(Birthregister,
+                             verbose_name=_("Birth Register Entry"))
+
+
+
+    
 
 ##############################################end of actual data details
 
@@ -453,6 +515,8 @@ class Deathregister(meta.Model):
 # Website specific stuff
 
 class Advertisement(meta.Model):
+    """ advertisements and announcements for the site
+        """
     title = meta.CharField(_("Title"),maxlength=250)
     date = meta.DateTimeField(_("Date"),default=meta.LazyDate())
     expires = meta.DateField(_("Expiry Date"),blank=True,null=True)
@@ -481,6 +545,8 @@ layout_types =(
     )
 
 class Facility(meta.Model):
+    """ Documentation - self explanatory
+        """
     title = meta.CharField(_("Title"),maxlength=250)
     type = meta.CharField(_("Entry Type"),maxlength=2,choices=facility_types)
     layout = meta.CharField(_("Layout"),maxlength=2,choices=layout_types)
