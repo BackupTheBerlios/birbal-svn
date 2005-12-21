@@ -48,7 +48,7 @@ class Person(meta.Model):
     rank = meta.ForeignKey(Official)
     status = meta.ForeignKey(Status)
     class META:
-        ordering = ['rank','name']
+        ordering = ['rank','name'.lower()]
         admin = meta.Admin(
         list_display = ('name','rank','status',),
             search_fields = ['name','rank'],)
@@ -119,6 +119,9 @@ class Reporttype(meta.Model):
 # detail tables for actual data
 
 #birth reports, death reports, birth register death register
+#should have just one big class and subclass the rest - but
+#subclassing is borked. The fields get diplayed in reverse order
+#in the admin. 
 
 class Birthreport(meta.Model):
     fileno = meta.CharField(_("File Number"),maxlength=50,unique=True)
@@ -129,9 +132,9 @@ class Birthreport(meta.Model):
     informant = meta.CharField(_("Informant"),maxlength=50)
     informantaddress = meta.TextField(_("Informants Address"))
     informantsarea = meta.ForeignKey(Area,
-                    verbose_name=_("Informants Area Address"))
+                    verbose_name=_("Informants Area"))
     informantstreet = meta.ForeignKey(Street,
-                    verbose_name=_("Informants Street Address"))
+                    verbose_name=_("Informants Street"))
     father = meta.CharField(_("Fathers Name"),maxlength=80)
     mother = meta.CharField(_("Mothers Name"),maxlength=80)
     address = meta.TextField(_("Childs Address"))
@@ -142,9 +145,9 @@ class Birthreport(meta.Model):
     birthplace = meta.CharField(_("Place of birth"),maxlength=50)
     birthaddress = meta.TextField(_("Birth Place Address"))
     birtharea = meta.ForeignKey(Area,
-                    verbose_name=_("Place of birth Area Address"))
+                    verbose_name=_("Place of birth Area"))
     birthstreet = meta.ForeignKey(Street,
-                    verbose_name=_("Place of birth Street Address"))
+                    verbose_name=_("Place of birth Street"))
     birthplacetype = meta.ForeignKey(Birthplace)
     scrutinised = meta.BooleanField(_("Scrutinised"),default=False)
     verified = meta.BooleanField(_("Verified"),default=False)
@@ -156,12 +159,285 @@ class Birthreport(meta.Model):
     reportfile = meta.ImageField(_("Scanned Report"),
                                  upload_to='images/reports/',
                                  blank=True,null=True)
+    comments = meta.TextField(_("Comments"),null=True,blank=True)
+    addedby = meta.CharField(_("Added By"),maxlength=100,editable=False)
     class META:
         admin = meta.Admin(
         list_display = ('fileno',),
-            search_fields = ['fileno'],)
+            search_fields = ['fileno'],
+        fields =
+            (
+                (
+                None,
+                    {
+                    'fields': ('fileno','reporttype','reportfile')
+                    }
+                ),
+                (
+                _("Informant Information"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('informant','informantsarea',
+                               'informantstreet','informantaddress')
+                    }
+                ),
+                (
+                _("Details of Birth"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('father','mother',
+                               'area','street',
+                               'dob','sex','comments')
+                    }
+                ),
+                (
+                _("Place of Birth"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('birthplacetype','birthplace',
+                               'birtharea','birthstreet',
+                               'birthaddress')
+                    }
+                ),
+                (
+                _("Official Use"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('scrutinised','verified','accepted')
+                    }
+                ),
+            ),
+        )
     def __repr__(self):
-            return "%s" %(self.fileno)
+            return "%s %s" %(self.fileno,self.reportfile)
+
+# some details are repeated - but it is necessary for audit purposes
+
+
+class Birthregister(meta.Model):
+    report = meta.ForeignKey(Birthreport,
+                             verbose_name=_("Original Report"))
+    dateopened = meta.DateTimeField(
+        _("Date Opened"),default=meta.LazyDate(),editable=False)
+    father = meta.CharField(_("Fathers Name"),maxlength=80)
+    mother = meta.CharField(_("Mothers Name"),maxlength=80)
+    address = meta.TextField(_("Childs Address"))
+    area = meta.ForeignKey(Area,verbose_name=_("Childs Area"))
+    street = meta.ForeignKey(Street,verbose_name=_("Childs Street"))
+    childname = meta.CharField(_("Name of Child"),maxlength=100,
+                               blank=True,null=True)
+    dob = meta.DateField(_("Date of birth"))
+    sex = meta.CharField('Sex',maxlength=2,choices=sexes)
+    birthplace = meta.CharField(_("Place of birth"),maxlength=50)
+    birthaddress = meta.TextField(_("Birth Place Address"))
+    birtharea = meta.ForeignKey(Area,
+                    verbose_name=_("Place of birth Area"))
+    birthstreet = meta.ForeignKey(Street,
+                    verbose_name=_("Place of birth Street"))
+    birthplacetype = meta.ForeignKey(Birthplace)
+    dateclosed = meta.DateField(_("Date Closed"),
+                                blank=True,null=True,
+                                editable=False)
+    comments = meta.TextField(_("Comments"),null=True,blank=True)
+    addedby = meta.CharField(_("Added By"),maxlength=100,editable=False)
+    class META:
+        admin = meta.Admin(
+        list_display = ('report',),
+            search_fields = ['report'],
+        fields =
+            (
+                (
+                None,
+                    {
+                    'fields': ('report',)
+                    }
+                ),
+                
+                (
+                _("Details of Birth"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('father','mother',
+                               'area','street',
+                               'dob','sex',
+                               'childname','comments')
+                    }
+                ),
+                (
+                _("Place of Birth"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('birthplacetype','birthplace',
+                               'birtharea','birthstreet',
+                               'birthaddress')
+                    }
+                ),
+                
+            ),
+        )
+    def __repr__(self):
+            return "%s" %(self.report)
+
+
+# all repeated for deaths
+
+class Deathreport(meta.Model):
+    fileno = meta.CharField(_("File Number"),maxlength=50,unique=True)
+    dateopened = meta.DateTimeField(
+        _("Date Opened"),default=meta.LazyDate(),editable=False)
+    reporttype = meta.ForeignKey(Reporttype,
+                    verbose_name=_("Report Type"))
+    informant = meta.CharField(_("Informant"),maxlength=50)
+    informantaddress = meta.TextField(_("Informants Address"))
+    informantsarea = meta.ForeignKey(Area,
+                    verbose_name=_("Informants Area"))
+    informantstreet = meta.ForeignKey(Street,
+                    verbose_name=_("Informants Street"))
+    name = meta.CharField(_("Deceased Name"),maxlength=80)
+    fathername = meta.CharField(_("Father/Husband Name"),maxlength=80)
+    address = meta.TextField(_("Deceased Address"))
+    area = meta.ForeignKey(Area,verbose_name=_("Deceased Area"))
+    street = meta.ForeignKey(Street,verbose_name=_("Deceased Street"))
+    dob = meta.DateField(_("Date of death"))
+    sex = meta.CharField('Sex',maxlength=2,choices=sexes)
+    causeofdeath = meta.CharField(_("Cause Of Death"),maxlength=150)
+    deathplace = meta.CharField(_("Place of death"),maxlength=50)
+    deathaddress = meta.TextField(_("death Place Address"))
+    deatharea = meta.ForeignKey(Area,
+                    verbose_name=_("Place of death Area"))
+    deathstreet = meta.ForeignKey(Street,
+                    verbose_name=_("Place of death Street"))
+    deathplacetype = meta.ForeignKey(Deathplace)
+    scrutinised = meta.BooleanField(_("Scrutinised"),default=False)
+    verified = meta.BooleanField(_("Verified"),default=False)
+    accepted = meta.BooleanField(_("Accepted"),default=False)
+    open = meta.BooleanField(_("File Open"),default=True,editable=False)
+    dateclosed = meta.DateField(_("Date Closed"),
+                                blank=True,null=True,
+                                editable=False)
+    reportfile = meta.ImageField(_("Scanned Report"),
+                                 upload_to='images/reports/',
+                                 blank=True,null=True)
+    comments = meta.TextField(_("Comments"),null=True,blank=True)
+    addedby = meta.CharField(_("Added By"),maxlength=100,editable=False)
+    class META:
+        admin = meta.Admin(
+        list_display = ('fileno',),
+            search_fields = ['fileno'],
+        fields =
+            (
+                (
+                None,
+                    {
+                    'fields': ('fileno','reporttype','reportfile')
+                    }
+                ),
+                (
+                _("Informant Information"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('informant','informantsarea',
+                               'informantstreet','informantaddress')
+                    }
+                ),
+                (
+                _("Details of death"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('name','fathersname',
+                               'area','street',
+                               'dob','sex',
+                               'causeofdeath','comments')
+                    }
+                ),
+                (
+                _("Place of death"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('deathplacetype','deathplace',
+                               'deatharea','deathstreet',
+                               'deathaddress')
+                    }
+                ),
+                (
+                _("Official Use"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('scrutinised','verified','accepted')
+                    }
+                ),
+            ),
+        )
+    def __repr__(self):
+            return "%s %s" %(self.fileno,self.reportfile)
+
+# some details are repeated - but it is necessary for audit purposes
+
+
+class Deathregister(meta.Model):
+    report = meta.ForeignKey(Deathreport,
+                             verbose_name=_("Original Report"))
+    dateopened = meta.DateTimeField(
+        _("Date Opened"),default=meta.LazyDate(),editable=False)
+    name = meta.CharField(_("Name"),maxlength=80)
+    fathersname = meta.CharField(_("Father/Husband Name"),maxlength=80)
+    address = meta.TextField(_("deceaseds Address"))
+    area = meta.ForeignKey(Area,verbose_name=_("deceaseds Area"))
+    street = meta.ForeignKey(Street,verbose_name=_("deceaseds Street"))
+    dob = meta.DateField(_("Date of death"))
+    sex = meta.CharField('Sex',maxlength=2,choices=sexes)
+    causeofdeath = meta.CharField(_("Cause Of Death"),maxlength=150)
+    deathplace = meta.CharField(_("Place of death"),maxlength=50)
+    deathaddress = meta.TextField(_("death Place Address"))
+    deatharea = meta.ForeignKey(Area,
+                    verbose_name=_("Place of death Area"))
+    deathstreet = meta.ForeignKey(Street,
+                    verbose_name=_("Place of death Street"))
+    deathplacetype = meta.ForeignKey(Deathplace)
+    dateclosed = meta.DateField(_("Date Closed"),
+                                blank=True,null=True,
+                                editable=False)
+    comments = meta.TextField(_("Comments"),null=True,blank=True)
+    addedby = meta.CharField(_("Added By"),maxlength=100,editable=False)
+    class META:
+        admin = meta.Admin(
+        list_display = ('report',),
+            search_fields = ['report'],
+        fields =
+            (
+                (
+                None,
+                    {
+                    'fields': ('report',)
+                    }
+                ),
+                
+                (
+                _("Details of death"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('name','fathersname',
+                               'area','street',
+                               'dob','sex',
+                               'causeofdeath','comments')
+                    }
+                ),
+                (
+                _("Place of death"),
+                    {
+                    'classes': 'collapse',
+                    'fields': ('deathplacetype','deathplace',
+                               'deatharea','deathstreet',
+                               'deathaddress')
+                    }
+                ),
+                
+            ),
+        )
+    def __repr__(self):
+            return "%s" %(self.report)
+
+
 
 ##############################################end of actual data details
 
