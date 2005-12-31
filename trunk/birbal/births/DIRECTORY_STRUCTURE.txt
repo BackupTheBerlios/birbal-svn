@@ -1,0 +1,17 @@
+Directory structure:
+
+Under apps, a series of apps
+
+website - specfic to website, documentation, advertisements faqs etc
+
+payroll - people management
+
+accounts - basically a reworked subset of avsap
+
+register - the main births and deaths module
+
+should we go the whole hog and make one more for addresses?
+
+yep
+
+address - town and street mapping (to do)
