@@ -2,6 +2,12 @@ Directory structure:
 
 Under apps, a series of apps
 
+idea being that since production and development are going side by side,
+there will be constant tinkering with the db - if split up, sqlreset can be
+freely used without disturbing more mature apps like the main website which
+is complete. Have to be careful to import stuff across apps, but that is
+do-able 
+
 website - specfic to website, documentation, advertisements faqs etc
 
 payroll - people management
@@ -10,8 +16,4 @@ accounts - basically a reworked subset of avsap
 
 register - the main births and deaths module
 
-should we go the whole hog and make one more for addresses?
-
-yep
-
-address - town and street mapping (to do)
+address - town and street mapping
