@@ -1,6 +1,3 @@
-# Create your views here.
-
-
 from django.core import template_loader
 from django.core.extensions import DjangoContext as Context
 from django.utils.httpwrappers import HttpResponse

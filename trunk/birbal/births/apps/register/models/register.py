@@ -462,5 +462,3 @@ class Notingbirthregister(Notingdeathreport):
 
 ##############################################end of actual data details
 
-
-
