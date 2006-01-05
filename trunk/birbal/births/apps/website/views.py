@@ -10,7 +10,7 @@ menu_items = [
               {'name':'Home','url':'fac/HM/','id':''},
               {'name':'FAQ','url':'fac/FQ/','id':''},
               {'name':'Documents','url':'fac/DC/','id':''},
-              {'name':'Officials','url':'officials/','id':''},
+              {'name':'Gallery','url':'galls//','id':''},
               ]
 
 fac_types ={
@@ -57,4 +57,41 @@ def fac(request,type):
                  'mn': menu_items,
                  })
     
+    return HttpResponse(t.render(c))
+
+
+
+def gallall(request,gall=''):
+    """ View for display of the thumbnails
+        in the gallery
+        """
+    if not gall:
+        gall = 1
+    list = photos.get_list(tag__id__exact=gall)
+    gals = tags.get_list()
+    gal = tags.get_object(id__exact=gall)
+    t = template_loader.get_template('website/gallall')
+    c = Context(request,
+                {'list':list,
+                 'ads':extract(),
+                 'mn': menu_items,
+                 'gals':gals,
+                 'gal':gal,
+                 })
+    return HttpResponse(t.render(c))
+
+def gal(request,id):
+    """ View for display of the thumbnails
+        in the gallery
+        """
+    list = photos.get_list(pk=id)
+    gals = tags.get_list()
+    t = template_loader.get_template('website/gal')
+    c = Context(request,
+                {'list':list,
+                 'ads':extract(),
+                 'mn': menu_items,
+                 'gals':gals,
+                 
+                 })
     return HttpResponse(t.render(c))

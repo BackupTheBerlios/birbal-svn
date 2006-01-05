@@ -1,4 +1,6 @@
 from django.core import meta
+import glob, PIL, os
+from births.thumbnails.field import *
 
 # Create your models here.
 
@@ -6,6 +8,20 @@ from django.core import meta
 ########################################################################
 
 # Website specific stuff
+
+
+
+class Tag(meta.Model):
+    """ Names of photo galleries
+        """
+    name = meta.CharField(_("Tag"),maxlength=50,unique=True)
+
+    class META:
+        admin = meta.Admin(
+        list_display = ('name',),
+            search_fields = ['name'],)
+    def __repr__(self):
+            return "%s" %(self.name)
 
 class Advertisement(meta.Model):
     """ advertisements and announcements for the site
@@ -58,4 +74,29 @@ class Facility(meta.Model):
             return "%s, Type: %s, Priority: %d, layout: %s\
             " %(self.title.capitalize(),self.get_type_display(),self.priority,\
                 self.get_layout_display())
+
+class Photo(meta.Model):
+    """ Photo Gallery - self explanatory
+        """
+    tag = meta.ManyToManyField(Tag,verbose_name=_("Tags"))
+    title = meta.CharField(_("Title"),maxlength=250)
+    photo = ImageWithThumbnailField(_("Photo"),upload_to='images/')
+    blurb = meta.CharField(_("Blurb for photo"),maxlength=250,blank=True,null=True)
+    priority = meta.IntegerField(_("Priority"),default=1)
+    class META:
+        ordering = ['priority']
+        admin = meta.Admin(
+        list_display = ('title','priority'),
+            search_fields = ['title'],
+        )
+    def _post_delete(self):
+        # remove thumbnails
+        from births.thumbnails.utils import remove_model_thumbnails
+        remove_model_thumbnails(self)
+
+   
+    
+    def __repr__(self):
+            return "%s, Priority: %d \
+            " %(self.title.capitalize(),self.priority)
 
