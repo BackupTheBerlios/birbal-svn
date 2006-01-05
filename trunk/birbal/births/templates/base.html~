@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"DTD/xhtml1-transitional.dtd">
+<html><head>
+<LINK REL="stylesheet" type='text/css' href='/sitemedia/css/layout.css' title='default'>
+{% load i18n %}
+<title>{% trans "Birbal eGovernance Project" %}</title>
+</head>
+<body>
+
+<div id="centertop">
+	<br/>
+	<br/>
+	<h1><span>{% trans "Municipal Corporation of Tuglaqabad" %}</span></h1>
+	<h4>{% trans "Office of The Registrar of Births and Deaths" %}</h4>
+	</div>
+
+<div id="leftcontent">
+	<div id="button">  
+		<ul>
+		{% block navsite %}
+		{% for p in mn %}
+			<li >
+			<a href = "/births/{{ p.url }}" {{ p.id }}> {{ p.name }}
+			</a>
+			</li>
+		{% endfor %}
+		{% endblock %}
+		</ul>
+    </div>
+</div>
+
+
+
+
+<div id="centercontent">
+{% block centercontent %} {% endblock %}
+</div>
+
+<div id="rightcontent">
+	{% block rightcontent %}
+	<div id="rightbox">
+		<h4>{% trans "Classified" %}</h4>
+		{% block rightcontentads %}
+		{% if ads %}
+		{% for p in ads %}
+		<p>
+		<b>{{ p.title }}</b>
+		<div id="more">
+		<a href="/births/full/{{ p.id }}/">{% trans "details ..." %}</a>
+		</div>
+		</p>
+		{% endfor %}
+		{% else %}
+		<p> No recent items </P>
+		{% endif %}
+		{% endblock %}
+	</div>
+	{% endblock %}
+</div>
+
+
+<div id="footer">
+<p>Built by <a href="mailto:webmaster@birbal.org.in">XLQuest</a>, 
+powered by FreeBSD, Apache, Python, Postgresql and Django
+ copyright 2005  
+ <a href="mailto:webmaster@birbal.org.in">The Birbal Project</a></p>
+ </div>
+</div>
+</body>
+</html>

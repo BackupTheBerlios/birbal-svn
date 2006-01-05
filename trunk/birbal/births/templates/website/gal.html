@@ -1,0 +1,37 @@
+{% extends "base" %}
+{% load thumbnails %}
+{% block centercontent %}
+<h1>Tags:</h1>
+<h3>
+{% for g in gals %}
+<a href="/births/galls/{{ g.id }}/">
+{{ g.name }}
+</a>
+{% endfor %}
+</h3>
+{% if list %}
+
+{% for p in list %}
+ <table align='center'>
+<tr >
+<th align='center'> 
+{{ p.title }}
+</th>
+</tr>
+<tr>
+<td align='center'>
+
+<img src = "{{ p.get_photo_url }}" width = 75%/>
+
+</td>
+</tr>
+<tr><td align="center">
+{{ p.blurb }}
+</td></tr>
+</table>
+
+  {% endfor %}
+{% else %}
+    <p> photos not found</p>
+{% endif %}
+{% endblock %}

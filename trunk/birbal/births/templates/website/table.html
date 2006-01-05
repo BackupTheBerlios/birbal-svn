@@ -1,0 +1,29 @@
+<table align='center'>
+<dtml-in getpeople>
+{% ifequal (forloopcounter-1)%4 0 %} 
+<tr>
+{% endif %}
+<td>   
+<table>
+<tr >
+<td align='center' width=25%> 
+<dtml-if thumb>
+<img src="http://www.keystone-foundation.net/masimg?nme=<dtml-var id>&table=people&thumb=1"
+width=75 height=75>
+</dtml-if>
+</td>
+</tr>
+<tr>
+     <td align='center' width=25%><a href="http://www.keystone-foundation.net/people/displayperson?idu=<dtml-var id>"><dtml-var fname>
+     <dtml-var lname><a></td>
+</tr>
+<tr>
+<td align='center' width=25%><dtml-var designation></td>
+</tr>
+</table>
+</td>
+{% ifequal forloopcounter%4 0 %}
+</tr>
+{% endif %}
+
+</table>

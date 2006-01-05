@@ -1,0 +1,48 @@
+{% extends "base" %}
+{% load thumbnails %}
+{% block centercontent %}
+<h1>Tags:</h1>
+<h3>
+{% for g in gals %}
+<a href="/births/galls/{{ g.id }}/">
+{{ g.name }}
+</a>
+{% endfor %}
+</h3>
+<br/>
+{% if list %}
+<h2>Tag Name: {{ gal }}</h2>
+ <table align='center'>
+{% for p in list %}
+{% if forloop.counter|add:"-1"|divisibleby:"4" %} 
+<tr>
+{% endif %}   
+
+<td>   
+<table>
+<tr >
+<th align='center' width=25%> 
+{{ p.title }}
+</th>
+</tr>
+<tr>
+<td align='center' width=25%>
+<a href="/births/gal/{{ p.id }}/">
+<img src = "{{ p.get_photo_url|thumbnail:"width=120" }}" width="120" height="120"/>
+</a>
+</td>
+</tr>
+
+</table>
+</td>
+{% if forloop.counter|divisibleby:"4" %} 
+<tr>
+{% endif %}
+
+
+    {% endfor %}
+</table>
+{% else %}
+    <p>No photos available</p>
+{% endif %}
+{% endblock %}
