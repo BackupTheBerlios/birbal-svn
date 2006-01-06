@@ -78,15 +78,16 @@ class Facility(meta.Model):
 class Photo(meta.Model):
     """ Photo Gallery - self explanatory
         """
+    date = meta.DateTimeField('Date',default=meta.LazyDate())
     tag = meta.ManyToManyField(Tag,verbose_name=_("Tags"))
-    title = meta.CharField(_("Title"),maxlength=250)
+    title = meta.CharField(_("Title"), maxlength=100)
     photo = ImageWithThumbnailField(_("Photo"),upload_to='images/')
-    blurb = meta.CharField(_("Blurb for photo"),maxlength=250,blank=True,null=True)
+    blurb = meta.TextField(_("Blurb for photo"),maxlength=250,blank=True,null=True)
     priority = meta.IntegerField(_("Priority"),default=1)
     class META:
-        ordering = ['priority']
+        ordering = ['priority','date']
         admin = meta.Admin(
-        list_display = ('title','priority'),
+        list_display = ('title','priority','date'),
             search_fields = ['title'],
         )
     def _post_delete(self):
