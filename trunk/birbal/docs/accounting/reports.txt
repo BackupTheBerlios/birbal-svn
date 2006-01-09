@@ -1,0 +1,39 @@
+Reports: for a trading company
+
+A report contains page/pages and each page contains columns and rows. These
+have to be detailed here
+
+1. Balance sheet
+
+
+2. Trial Balance
+
+3. Receipts/Payments report
+
+4. Profit and loss report
+
+5. Trading report
+
+6. Ledgers
+
+7. books of account
+
+8. Taxation reports
+
+9. audit trail reports
+
+10. inventory/stock reports
+
+11. Bills/Invoices
+
+12. aging
+
+13. cost center analysis
+
+14 purchase planning
+
+15 sales reports
+
+16 payroll and employee related reports
+
+17 statutory returns
