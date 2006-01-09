@@ -1,0 +1,18 @@
+Questions
+
+1. coded accounting or codeless accounting?
+
+2. Heads of account to be unique and in tree form?
+
+3. Names of accounts and heads to be 
+	a. fixed and not alterable
+	b. some fixed and not alterable (assets, liabilities for example)
+	c. All totally customisable
+	
+4. Accounting year - fixed or changeable
+
+5. Accounts for each year in different databases or same one
+
+6. editing of entries allowable? If so, to what extent and by whom
+
+7. serial nos of entries to be generated or manual?
