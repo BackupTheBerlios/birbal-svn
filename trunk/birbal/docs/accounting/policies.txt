@@ -1,8 +1,13 @@
 Questions
 
-1. coded accounting or codeless accounting?
+1. coded accounting or codeless accounting? This is a fundamental decision,
+in codeless accounting there is the possibilty of changing positions of
+accounts by drag and drop, whereas in coded accounting the whole thing has
+to be done manually. What are the pros and cons.
 
-2. Heads of account to be unique and in tree form?
+2. Heads of account to be unique and in tree form? If the name of the head
+of account is not unique, then a combination of the head+parent has to be
+unique. 
 
 3. Names of accounts and heads to be 
 	a. fixed and not alterable

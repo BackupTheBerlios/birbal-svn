@@ -34,6 +34,8 @@ def extract():
     return list
 
 
+
+
 def index(request):
     """ Not used
         """
@@ -65,9 +67,10 @@ def gallall(request,gall=''):
     """ View for display of the thumbnails
         in the gallery
         """
-    if not gall:
-        gall = 1
-    list = photos.get_list(tag__id__exact=gall)
+    if gall:
+        list = photos.get_list(tag__id__exact=gall)
+    else:
+        list = []
     gals = tags.get_list()
     gal = tags.get_object(id__exact=gall)
     t = template_loader.get_template('website/gallall')
@@ -95,3 +98,5 @@ def gal(request,id):
                  
                  })
     return HttpResponse(t.render(c))
+
+
