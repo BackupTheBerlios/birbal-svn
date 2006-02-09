@@ -1,5 +1,7 @@
+# -*- coding: iso-8859-1 -*-
 from django.core import template_loader
 from django.core.extensions import DjangoContext as Context
+from django.parts.auth.formfields import AuthenticationForm
 from django.utils.httpwrappers import HttpResponse
 from births.apps.website.models.website import *
 import datetime
@@ -98,5 +100,38 @@ def gal(request,id):
                  
                  })
     return HttpResponse(t.render(c))
+
+
+
+class LoginManipulator(AuthenticationForm):
+    def __init__(self, request):
+        AuthenticationForm.__init__(self, request)
+        self.fields.append(
+            formfields.CheckboxField(field_name="remember"))
+
+def index(request):
+    manipulator = LoginManipulator(request)
+    redirect_to = request.REQUEST.get('next','')
+    if request.POST:
+        new_data = request.POST.copy()
+        errors = manipulator.get_validation_errors(new_data)
+        if not errors:
+            request.session[users.SESSION_KEY] = manipulator.get_user_id()
+            request.session.delete_test_cookie()
+            if request.REQUEST.has_key('next'):
+                return HttpResponseRedirect(request.REQUEST['next'])
+            else:
+                return HttpResponseRedirect("../home/")
+    else:
+        request.session.set_test_cookie()
+        errors = new_data = {}
+
+    form = formfields.FormWrapper(manipulator, new_data, errors)
+    return render_to_response('myapp/index',
+                              {'form': form,
+                               'signin_page': True,
+                               'redirect_to': redirect_to},
+                              context_instance=DjangoContext(request))
+
 
 
